@@ -38,7 +38,7 @@ def test(request):
     client = Client(sid, token)
     message = client.messages.create(
         to="+40761349197", 
-        from_="+40770192293",
+        from_="+12018347169",
         body="Hello from Super Duper App")
 
     return HttpResponse('ok')

@@ -27,7 +27,7 @@ SECRET_KEY = '@*38lzf_hhet!s%5nqokhug)u-d*8h_o+rt=_n(4-k&!pxqdgy'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['92bdade2.ngrok.io', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['095a1a3d.ngrok.io', 'localhost', '127.0.0.1']
 BASE_URL = 'http://' + ALLOWED_HOSTS[0] + '/'
 BASE_URL_SSL = 'https://' + ALLOWED_HOSTS[0] + '/'
 
