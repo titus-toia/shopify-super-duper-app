@@ -1,7 +1,10 @@
 #Todo: Use a proper service layer later on
 import shopify
 import logging
+import json
 
+from datetime import timedelta
+from django.utils import timezone
 from django.apps import apps
 from django.conf import settings
 
@@ -18,7 +21,19 @@ def subscribe_webhooks(sender, **kwargs):
         logger.error(hook.errors.full_messages())
 
 def queue_welcome_sms(sender, **kwargs):
+    from shopify_app.models import Task
 
-    logger.info("APP HAS BEEN INSTALLED")
-    logger.info("Should send SMS 5 minutes after")
-    pass
+    # shop = shopify.Shop.current()
+    # user = shopify.User.current()
+
+    # data = {
+    #     'phone': user.phone or '+40761349197',
+    #     'firstname': user.first_name,
+    #     'storename': shop.name,
+    #     'customer_count': len(shopify.Customer.find())
+    # }
+    
+    # task = Task(method="send_welcome_email",
+    #     data=json.dumps(data),
+    #     scheduled_on=timezone.now() + timedelta(minutes=5))
+    # task.save()

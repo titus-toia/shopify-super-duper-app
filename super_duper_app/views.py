@@ -21,9 +21,8 @@ logger = logging.getLogger('debug')
 
 @shop_login_required
 def index(request):
-    products = shopify.Product.find(limit=3)
-    orders = shopify.Order.find(limit=3, order="created_at DESC")
-    return render(request, 'base/index.html', {'products': products, 'orders': orders})
+    webhooks = shopify.Webhook.find()
+    return render(request, 'base/webhooks.html', {'webhooks': webhooks})
 @shop_login_required
 def webhooks(request):
     webhooks = shopify.Webhook.find()
@@ -31,17 +30,18 @@ def webhooks(request):
 
 @shop_login_required
 def test(request):
-    from twilio.rest import Client
-    sid = app_config.twilio_account_sid
-    token = app_config.twilio_auth_token
+    import json
+    shop = shopify.Shop.current()
+    user = shopify.User.current()
 
-    client = Client(sid, token)
-    message = client.messages.create(
-        to="+40761349197", 
-        from_="+12018347169",
-        body="Hello from Super Duper App")
+    data = {
+        'phone': user.phone or '+40761349197',
+        'firstname': user.first_name,
+        'storename': shop.name,
+        'customer_count': len(shopify.Customer.find())
+    }
 
-    return HttpResponse('ok')
+    return HttpResponse(json.dumps(data))
 
 
 class WebhookView(View):

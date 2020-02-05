@@ -11,5 +11,5 @@ class Task(models.Model):
     data = models.TextField(default='{}')
     retry = models.IntegerField(default = 3)
     executed = models.BooleanField(default = False)
-    scheduled_on = models.DateTimeField(auto_now_add=True)
+    scheduled_on = models.DateTimeField()
     created_on = models.DateTimeField(auto_now_add=True)

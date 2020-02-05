@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shopify_app.apps.ShopifyAppConfig',
     'super_duper_app.apps.SuperDuperAppConfig',
+    'jobs'
 ]
 
 MIDDLEWARE = [
