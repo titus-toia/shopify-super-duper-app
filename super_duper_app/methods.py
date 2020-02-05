@@ -22,9 +22,15 @@ def subscribe_webhooks(sender, **kwargs):
 
 def queue_welcome_sms(sender, **kwargs):
     from shopify_app.models import Task
+    shop = shopify.Shop.current()
+    # user = shopify.User.current() #Can't use this unless shopify plus
 
-    # shop = shopify.Shop.current()
-    # user = shopify.User.current()
+    data = {
+        'phone': shop.phone or '+40761349197',
+        'firstname': shop.shop_owner.split(" ")[0] or 'Shop Owner',
+        'storename': shop.name,
+        'customer_count': len(shopify.Customer.find())
+    }
 
     # data = {
     #     'phone': user.phone or '+40761349197',
@@ -33,7 +39,7 @@ def queue_welcome_sms(sender, **kwargs):
     #     'customer_count': len(shopify.Customer.find())
     # }
     
-    # task = Task(method="send_welcome_email",
-    #     data=json.dumps(data),
-    #     scheduled_on=timezone.now() + timedelta(minutes=5))
-    # task.save()
+    task = Task(method="send_welcome_email",
+        data=json.dumps(data),
+        scheduled_on=timezone.now() + timedelta(minutes=5))
+    task.save()
