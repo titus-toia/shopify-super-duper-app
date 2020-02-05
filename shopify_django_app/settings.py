@@ -27,7 +27,9 @@ SECRET_KEY = '@*38lzf_hhet!s%5nqokhug)u-d*8h_o+rt=_n(4-k&!pxqdgy'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['92bdade2.ngrok.io', 'localhost', '127.0.0.1']
+BASE_URL = 'http://' + ALLOWED_HOSTS[0] + '/'
+BASE_URL_SSL = 'https://' + ALLOWED_HOSTS[0] + '/'
 
 # Application definition
 
@@ -39,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shopify_app.apps.ShopifyAppConfig',
-    'home.apps.HomeConfig',
+    'super_duper_app.apps.SuperDuperAppConfig',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +73,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'shopify_django_app.wsgi.application'
 
@@ -123,3 +127,33 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#LOG
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'app': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'app.log',
+        },
+        'debug': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        }
+    },
+    'loggers': {
+        '': {
+            'handlers': ['app'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'debug': {
+            'handlers': ['debug'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
+    },
+}
