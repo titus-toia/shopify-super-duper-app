@@ -65,7 +65,6 @@ def finalize(request):
             "shop_url": shop_url,
             "access_token": session.request_token(request.GET)
         }
-        processShopIfNew(shop_url)
     except Exception as err:
         logger.warn(str(err))
         messages.error(request, "Could not log in to Shopify store.")
@@ -73,10 +72,6 @@ def finalize(request):
 
     #Artificially init session since we have to actually be logged in to send signal
     shopify.Session.setup(api_key=apps.get_app_config('shopify_app').SHOPIFY_API_KEY, secret=apps.get_app_config('shopify_app').SHOPIFY_API_SECRET)
-
-
-
-    #Login complete
     messages.info(request, "Logged in to shopify store.")
     request.session.pop('return_to', None)
     api_version = apps.get_app_config('shopify_app').SHOPIFY_API_VERSION
@@ -85,18 +80,22 @@ def finalize(request):
     shopify_session.token = request.session['shopify']['access_token']
     shopify.ShopifyResource.activate_session(shopify_session)
 
+    #Login complete
+    shopId = shopify.Shop.current().id
+    processShopIfNew(shopId)
     app_login.send(None)
+
     return redirect(request.session.get('return_to', reverse('root_path')))
 
-def processShopIfNew(shop_url):
+def processShopIfNew(id):
     try:
-        shop = Shop.objects.get(name = shop_url)
+        shop = Shop.objects.get(name = id)
         if shop.installed == False: #Previously uninstalled
             shop.installed = True
             shop.save()
             app_installed.send(None)
     except ObjectDoesNotExist:
-        shop = Shop(name=shop_url) #Installing first time now
+        shop = Shop(name = id) #Installing first time now
         shop.save()
         app_installed.send(None)
 
