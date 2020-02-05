@@ -6,11 +6,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.core.exceptions import ObjectDoesNotExist
 
-import shopify
-from shopify_app.decorators import shop_login_required
-from .decorators import webhook
-from shopify_app.models import Shop
+from django.apps import apps
 
+import shopify
+
+from shopify_app.decorators import shop_login_required
+from shopify_app.models import Shop
+from .decorators import webhook
+
+app_config = apps.get_app_config('super_duper_app')
 
 import logging
 logger = logging.getLogger('debug')
@@ -27,7 +31,17 @@ def webhooks(request):
 
 @shop_login_required
 def test(request):
-    return HttpResponse(shopify.Shop.current().id)
+    from twilio.rest import Client
+    sid = app_config.twilio_account_sid
+    token = app_config.twilio_auth_token
+
+    client = Client(sid, token)
+    message = client.messages.create(
+        to="+40761349197", 
+        from_="+40770192293",
+        body="Hello from Super Duper App")
+
+    return HttpResponse('ok')
 
 
 class WebhookView(View):

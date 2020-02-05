@@ -1,6 +1,8 @@
 #Todo: Use a proper service layer later on
 import shopify
 import logging
+
+from django.apps import apps
 from django.conf import settings
 
 logger = logging.getLogger('debug')
@@ -16,6 +18,7 @@ def subscribe_webhooks(sender, **kwargs):
         logger.error(hook.errors.full_messages())
 
 def queue_welcome_sms(sender, **kwargs):
+
     logger.info("APP HAS BEEN INSTALLED")
     logger.info("Should send SMS 5 minutes after")
     pass
