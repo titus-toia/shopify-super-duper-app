@@ -2,11 +2,10 @@
 import shopify
 import logging
 from django.conf import settings
-from shopify_app.decorators import shop_login_required
 
 logger = logging.getLogger('debug')
 
-
+#Requires login
 def subscribe_webhooks(sender, **kwargs):
     logger.info("HOOKS ARE HERE")
     hook = shopify.Webhook()
@@ -17,14 +16,14 @@ def subscribe_webhooks(sender, **kwargs):
     if(hook.errors):
         logger.error(hook.errors.full_messages())
     
-    # #Also test hook 4 product creation
-    # hook = shopify.Webhook()
-    # hook.topic = "products/create"
-    # hook.address = settings.BASE_URL_SSL + "app-uninstalled"
-    # hook.format = "json"
-    # hook.save()
-    # if(hook.errors):
-    #     logger.error(hook.errors.full_messages())
+    #Also test hook 4 product creation
+    hook = shopify.Webhook()
+    hook.topic = "products/create"
+    hook.address = settings.BASE_URL_SSL + "app-uninstalled"
+    hook.format = "json"
+    hook.save()
+    if(hook.errors):
+        logger.error(hook.errors.full_messages())
     pass
 
 

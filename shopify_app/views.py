@@ -72,10 +72,18 @@ def finalize(request):
         return redirect(reverse(login))
 
     #Artificially init session since we have to actually be logged in to send signal
+    shopify.Session.setup(api_key=apps.get_app_config('shopify_app').SHOPIFY_API_KEY, secret=apps.get_app_config('shopify_app').SHOPIFY_API_SECRET)
 
-    
+
+
+    #Login complete
     messages.info(request, "Logged in to shopify store.")
     request.session.pop('return_to', None)
+    api_version = apps.get_app_config('shopify_app').SHOPIFY_API_VERSION
+    shop_url = request.session['shopify']['shop_url']
+    shopify_session = shopify.Session(shop_url, api_version)
+    shopify_session.token = request.session['shopify']['access_token']
+    shopify.ShopifyResource.activate_session(shopify_session)
 
     app_login.send(None)
     return redirect(request.session.get('return_to', reverse('root_path')))
