@@ -4,8 +4,8 @@ from .methods import queue_welcome_sms, subscribe_webhooks
 
 class SuperDuperAppConfig(AppConfig):
     name = 'super_duper_app'
-    twilio_account_sid = 'AC6284c2dd5fcb7ca3d102aff51f93c8cc'
-    twilio_auth_token = '61d9c7ab58a1a7a4b061bcfbf2c9edb6'
+    twilio_account_sid = 'twilio_account_sid'
+    twilio_auth_token = 'twilio_auth_token'
 
     def ready(self):
         #Django is run in separate threads so we need to ensure this is registered only once

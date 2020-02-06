@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
+  <h2>Your store has {{ customers|length }} customers.</h2>
+  {% if customers|length %}
+    <ul>
+    {% for customer in customers %}
+    <p>{{customer.first_name}} {{customer.last_name}}</p>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  
   <h2>Your webhooks</h2>
   {% for hook in webhooks %}
     <div class="product box">

@@ -22,7 +22,8 @@ logger = logging.getLogger('debug')
 @shop_login_required
 def index(request):
     webhooks = shopify.Webhook.find()
-    return render(request, 'base/webhooks.html', {'webhooks': webhooks})
+    customers = shopify.Customer.find()
+    return render(request, 'base/webhooks.html', {'webhooks': webhooks, 'customers': customers})
 @shop_login_required
 def webhooks(request):
     webhooks = shopify.Webhook.find()
